@@ -1,11 +1,11 @@
 'use client'
 
 import Link from 'next/link'
-import ConceptCard from './_components/ConceptCard'
 import PostsList from './_components/PostsList'
 import QueryStatesDemo from './_components/QueryStatesDemo'
 import { useState } from 'react'
 import PostDetail from './_components/PostDetail'
+import ConceptCard from '../_components/ConceptCard'
 
 export default function FundamentalsPage() {
   const [selectedPostId, setSelectedPostId] = useState<number | null>()
