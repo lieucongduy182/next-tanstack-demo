@@ -1,47 +1,7 @@
 import { CreatePostInput, Post, UpdatePostInput } from '@/app/types/post'
+import { generatePostRecords } from '../generateRecords'
 
-let postsDB: Post[] = [
-  {
-    id: 1,
-    title: 'Getting Started with TanStack Query',
-    body: 'TanStack Query is a powerful data synchronization library for React...',
-    userId: 1,
-    likes: 42,
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: 2,
-    title: 'Advanced React Patterns',
-    body: 'Learn about compound components, render props, and custom hooks...',
-    userId: 2,
-    likes: 38,
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: 3,
-    title: 'TypeScript Best Practices',
-    body: 'Type safety is crucial for large-scale applications...',
-    userId: 1,
-    likes: 51,
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: 4,
-    title: 'Next.js App Router Guide',
-    body: 'The new App Router brings server components and streaming...',
-    userId: 3,
-    likes: 67,
-    createdAt: new Date().toISOString(),
-  },
-  {
-    id: 5,
-    title: 'Building Scalable APIs',
-    body: 'REST vs GraphQL: choosing the right API architecture...',
-    userId: 2,
-    likes: 29,
-    createdAt: new Date().toISOString(),
-  },
-]
+const postsDB: Post[] = generatePostRecords()
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
@@ -68,7 +28,7 @@ export const postsApi = {
     pageParam = 0,
   }: {
     pageParam?: number
-  }): Promise<{ posts: Post[]; nextPage: number | undefined }> => {
+  }): Promise<{ posts: Post[]; nextCursor: number | undefined }> => {
     await delay(1000)
     const limit = 3
     const start = pageParam * limit
@@ -77,7 +37,7 @@ export const postsApi = {
 
     return {
       posts,
-      nextPage: end < postsDB.length ? pageParam + 1 : undefined,
+      nextCursor: end < postsDB.length ? pageParam + 1 : undefined,
     }
   },
 
@@ -98,7 +58,7 @@ export const postsApi = {
       createdAt: new Date().toISOString(),
     }
 
-    postsDB = [...postsDB, newPost]
+    postsDB.push(newPost)
 
     return newPost
   },
