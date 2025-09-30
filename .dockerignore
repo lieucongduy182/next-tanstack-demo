@@ -1,0 +1,32 @@
+# Dependencies
+node_modules
+
+# Ignore Next.js build output
+.next
+out
+
+# Git
+.git
+.gitignore
+
+# Production
+build
+dist
+
+# Misc
+.DS_Store
+
+# Debug 
+*.log
+
+# Local env files
+.env*.local
+.env
+
+# Typescript
+*.tsbuildinfo
+next-env.d.ts
+
+# IDE
+.vscode
+.idea
