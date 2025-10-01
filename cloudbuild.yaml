@@ -45,10 +45,10 @@ steps:
 # Store the image in Container Registry
 images:
   - 'gcr.io/$PROJECT_ID/next-tanstack-tutorial:$COMMIT_SHA'
-  - 'gcr.io/$PROJECT_ID/next-tanstack-tutorial:latest
+  - 'gcr.io/$PROJECT_ID/next-tanstack-tutorial:latest'
 
 options:
-  logging: 'CLOUD_LOGGING_ONLY'
-  machineType: 'E2_HIGHCPU_8'
+  logging: CLOUD_LOGGING_ONLY
+  machineType: E2_HIGHCPU_8
 
 timeout : '1200s'
