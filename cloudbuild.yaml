@@ -15,6 +15,10 @@ steps:
     args:
       - 'push'
       - 'gcr.io/$PROJECT_ID/next-tanstack-tutorial:$COMMIT_SHA'
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args:
+      - 'push'
       - 'gcr.io/$PROJECT_ID/next-tanstack-tutorial:latest'
 
   # Step 3: Deploy to Cloud Run
