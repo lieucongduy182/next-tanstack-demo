@@ -1,36 +1,191 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 TanStack Query Tutorial
 
-## Getting Started
+A comprehensive, interactive tutorial for learning TanStack Query (React Query) from fundamentals to advanced concepts. Built with Next.js 15, TypeScript, and Tailwind CSS. Deploy project to Google Cloud & Trigger automatically the deployment.
 
-First, run the development server:
+## 📚 What You'll Learn
+
+This tutorial covers everything you need to master TanStack Query:
+
+- **Fundamentals** - useQuery, useMutation, cache management
+- **Advanced Concepts** - Parallel queries, dependent queries, pagination
+- **Optimistic Updates** - Instant UI updates with automatic rollback
+- **Infinite Queries** - Infinite scrolling with useInfiniteQuery
+
+## ✨ Features
+
+- 🎯 **Interactive Examples** - Live demos with real mock API calls
+- 💻 **Complete Code Samples** - Copy-paste ready code for each concept
+- 🎨 **Beautiful UI** - Modern design with Tailwind CSS
+- 🌙 **Dark Mode** - Full dark mode support
+- 📱 **Responsive** - Works on all devices
+- 🔍 **React Query DevTools** - Built-in debugging tools
+- ⚡ **TypeScript** - Fully typed for better developer experience
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js 20+ installed
+- npm or pnpm package manager
+-  
+
+### Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+# Install pnpm package manager
+npm i -g pnpm@latest
+
+# Clone the repository
+git clone https://github.com/lieucongduy182/next-tanstack-tutorial.git
+cd next-tanstack-tutorial
+
+# Install dependencies
+pnpm install
+
+# Run development server
 pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) to view the tutorial.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 📖 Tutorial Structure
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```
+/                          - Home page with tutorial overview
+/fundamentals              - Basic useQuery and useMutation
+/advanced                  - Parallel queries, dependent queries, pagination
+/optimistic-updates        - Optimistic UI patterns
+/infinite-query            - Infinite scrolling implementation
+```
 
-## Learn More
+## 🗂️ Project Structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+next-tanstack-tutorial/
+├── src/
+│   ├── app/                      # Next.js App Router
+│   │   ├── fundamentals/         # Fundamentals tutorial
+│   │   ├── advanced/             # Advanced concepts
+│   │   ├── optimistic-updates/   # Optimistic updates demo
+│   │   └── infinite-query/       # Infinite query demo
+│   │
+│   ├── components/
+│   │   └── providers/            # QueryClientProvider setup
+│   │
+│   ├── lib/
+│   │   ├── api/                  # Mock API functions
+│   │   │   ├── posts.ts
+│   │   │   ├── users.ts
+│   │   │   └── todos.ts
+│   │   └── queryClient.ts        # QueryClient configuration
+│   │
+│   └── types/                    # TypeScript types
+│       ├── post.ts
+│       ├── user.ts
+│       └── todo.ts
+│
+├── public/                       # Static assets
+├── Dockerfile                    # Docker configuration
+├── docker-compose.yml            # Docker Compose setup
+├── cloudbuild.yaml              # Google Cloud Build config
+└── package.json                  # Dependencies
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🛠️ Technologies Used
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- **[Next.js 15](https://nextjs.org/)** - React framework with App Router
+- **[TanStack Query v5](https://tanstack.com/query)** - Data synchronization library
+- **[TypeScript](https://www.typescriptlang.org/)** - Type safety
+- **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS
+- **[React Query DevTools](https://tanstack.com/query/latest/docs/react/devtools)** - Debugging tools
+- **[Google Cloud Console](https://console.cloud.google.com/query/latest/docs/react/devtools)** - Google Cloud for Services, Build, APIs & Services
 
-## Deploy on Vercel
+## 📦 Available Scripts
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+# Development
+pnpm dev          # Start development server
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+# Production
+pnpm run build        # Build for production
+pnpm start            # Start production server
+
+# Docker
+docker build -t next-tanstack-tutorial .
+docker run -p 8080:8080 next-tanstack-tutorial
+
+# Docker Compose
+docker-compose up    # Start with Docker Compose
+```
+
+### Deploy to Google Cloud Run
+
+```bash
+# Set your project ID
+export PROJECT_ID=your-project-id
+
+# Build and push image
+docker build -t gcr.io/$PROJECT_ID/next-tanstack-tutorial:latest .
+docker push gcr.io/$PROJECT_ID/next-tanstack-tutorial:latest
+
+# Deploy to Cloud Run
+gcloud run deploy next-tanstack-tutorial \
+  --image gcr.io/$PROJECT_ID/next-tanstack-tutorial:latest \
+  --platform managed \
+  --region asia-southeast1 \
+  --allow-unauthenticated
+```
+
+## 🔄 CI/CD with Cloud Build
+
+Automatic deployment on every push to `main` branch:
+
+1. **Enable Cloud Build API** in Google Cloud Console
+2. **Connect your GitHub repository** to Cloud Build
+3. **Push to main branch** - automatic deployment triggers
+
+The `cloudbuild.yaml` file is already configured for automatic deployments.
+
+## 💡 Key Concepts
+
+### Query Keys
+```typescript
+// Simple key
+queryKey: ['posts']
+
+// With parameters
+queryKey: ['posts', { page: 1 }]
+
+// Nested
+queryKey: ['user', userId, 'posts']
+```
+
+### Query Options
+```typescript
+{
+  staleTime: 1000 * 60 * 5,    // 5 minutes
+  gcTime: 1000 * 60 * 10,       // 10 minutes
+  retry: 1,
+}
+```
+
+### Mutations
+```typescript
+const mutation = useMutation({
+  mutationFn: createPost,
+  onSuccess: () => {
+    queryClient.invalidateQueries({ queryKey: ['posts'] });
+  },
+});
+```
+
+## 🙏 Acknowledgments
+
+- [TanStack Query Documentation](https://tanstack.com/query/latest)
+- [Next.js Documentation](https://nextjs.org/docs)
+- [Tailwind CSS](https://tailwindcss.com/)
+- [Google Cloud](https://cloud.google.com/docs)
+
+---
+
+**Built with ❤️ using TanStack Query, Next.js, and TypeScript**
