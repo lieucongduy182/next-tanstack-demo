@@ -27,7 +27,6 @@ This tutorial covers everything you need to master TanStack Query:
 
 - Node.js 20+ installed
 - npm or pnpm package manager
--  
 
 ### Installation
 
@@ -98,7 +97,7 @@ next-tanstack-tutorial/
 - **[TypeScript](https://www.typescriptlang.org/)** - Type safety
 - **[Tailwind CSS](https://tailwindcss.com/)** - Utility-first CSS
 - **[React Query DevTools](https://tanstack.com/query/latest/docs/react/devtools)** - Debugging tools
-- **[Google Cloud Console](https://console.cloud.google.com/query/latest/docs/react/devtools)** - Google Cloud for Services, Build, APIs & Services
+- **[Google Cloud Console](https://console.cloud.google.com/)** - Google Cloud for Services, Build, APIs & Services
 
 ## 📦 Available Scripts
 
