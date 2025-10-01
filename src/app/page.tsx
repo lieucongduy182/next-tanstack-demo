@@ -38,7 +38,7 @@ export default function Home() {
         {/* Header */}
         <div className="text-center mb-16">
           <h1 className="text-5xl font-bold text-gray-900 dark:text-white mb-4">
-            TanStack Query Tutorial
+            TanStack Query Tutorial And Deploy App To Google Cloud
           </h1>
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
             Master data fetching, caching, and state management in React with
