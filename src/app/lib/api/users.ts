@@ -1,38 +1,20 @@
 import { User } from '@/app/types/user'
 
-const usersDB: User[] = [
-  {
-    id: 1,
-    name: 'Alice Johnson',
-    email: 'alice@example.com',
-    avatar: '👩‍💻',
-  },
-  {
-    id: 2,
-    name: 'Bob Smith',
-    email: 'bob@example.com',
-    avatar: '👨‍💼',
-  },
-  {
-    id: 3,
-    name: 'Carol White',
-    email: 'carol@example.com',
-    avatar: '👩‍🎨',
-  },
-]
-
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api'
 
 export const usersApi = {
   getUsers: async (): Promise<User[]> => {
-    await delay(800)
-    return [...usersDB]
+    const res = await fetch(`${API_URL}/users`)
+    if (!res.ok) {
+      throw new Error('Failed to fetch users')
+    }
+
+    return res.json()
   },
 
   getUserById: async (id: number): Promise<User> => {
-    await delay(500)
-    const user = usersDB.find((u) => u.id === id)
-    if (!user) throw new Error(`User with id ${id} not found`)
-    return user
+    const res = await fetch(`${API_URL}/users/${id}`)
+    if (!res.ok) throw new Error(`User with id ${id} not found`)
+    return res.json()
   },
 }

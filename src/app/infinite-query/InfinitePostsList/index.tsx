@@ -67,7 +67,7 @@ export default function InfinitePostsList() {
 
       {/* Posts List */}
       <div className="space-y-3 max-h-[600px] overflow-y-auto pr-2">
-        {allPosts.map((post, index) => {
+        {allPosts?.map((post, index) => {
           const isLast = index === allPosts.length - 1
           return (
             <div

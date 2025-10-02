@@ -1,101 +1,99 @@
 import { CreatePostInput, Post, UpdatePostInput } from '@/app/types/post'
-import { generatePostRecords } from '../generateRecords'
 
-const postsDB: Post[] = generatePostRecords()
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api'
 
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 export const postsApi = {
   getPosts: async (): Promise<Post[]> => {
-    await delay(1000)
-    return [...postsDB]
+    const res = await fetch(`${API_URL}/posts`)
+    if (!res.ok) {
+      throw new Error('Failed to fetch posts')
+    }
+
+    return res.json()
   },
 
   getPaginatedPosts: async (
     page: number = 1,
     limit: number = 2,
   ): Promise<{ posts: Post[]; hasMore: boolean; total: number }> => {
-    await delay(800)
-    const start = (page - 1) * limit
-    const end = start + limit
-    const posts = postsDB.slice(start, end)
+    const res = await fetch(`${API_URL}/posts?page=${page}&limit=${limit}`)
+    if (!res.ok) {
+      throw new Error('Failed to fetch posts')
+    }
 
-    return { posts, hasMore: end < postsDB.length, total: postsDB.length }
+    const { posts, total, hasMore } = await res.json()
+    return { posts, hasMore, total }
   },
 
-  // Get infinite posts (for infinite query)
   getInfinitePosts: async ({
     pageParam = 0,
   }: {
     pageParam?: number
   }): Promise<{ posts: Post[]; nextCursor: number | undefined }> => {
-    await delay(1000)
-    const limit = 3
-    const start = pageParam * limit
-    const end = start + limit
-    const posts = postsDB.slice(start, end)
-
-    return {
-      posts,
-      nextCursor: end < postsDB.length ? pageParam + 1 : undefined,
+    const res = await fetch(`${API_URL}/posts/infinite?pageParam=${pageParam}`)
+    if (!res.ok) {
+      throw new Error('Failed to fetch posts')
     }
+
+    await delay(1000)
+
+    const { posts, nextCursor } = await res.json()
+    return { posts, nextCursor }
   },
 
   getPostById: async (id: number): Promise<Post> => {
-    await delay(600)
-    const post = postsDB.find((p) => p.id === id)
-    if (!post) throw new Error(`Post with id ${id} not found`)
-    return post
+    const res = await fetch(`${API_URL}/posts/${id}`)
+    if (!res.ok) throw new Error(`Post with id ${id} not found`)
+    return res.json()
   },
 
   createPost: async (input: CreatePostInput): Promise<Post> => {
-    await delay(800)
+    const res = await fetch(`${API_URL}/posts`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(input),
+    })
+    if (!res.ok) throw new Error('Failed to create post')
 
-    const newPost: Post = {
-      id: Math.max(...postsDB.map((p) => p.id)) + 1,
-      ...input,
-      likes: 0,
-      createdAt: new Date().toISOString(),
-    }
-
-    postsDB.push(newPost)
-
-    return newPost
+    return res.json()
   },
 
   updatePost: async (input: UpdatePostInput): Promise<Post> => {
-    await delay(800)
+    const res = await fetch(`${API_URL}/posts/${input.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(input),
+    })
+    if (!res.ok) throw new Error(`Failed to update post with id ${input.id}`)
 
-    const index = postsDB.findIndex((p) => p.id === input.id)
-    if (index === -1) throw new Error(`Post with id ${input.id} not found`)
-    postsDB[index] = { ...postsDB[index], ...input }
-
-    return postsDB[index]
+    return res.json()
   },
 
   deletePost: async (id: number): Promise<void> => {
-    await delay(600)
+    const res = await fetch(`${API_URL}/posts/${id}`, {
+      method: 'DELETE',
+    })
 
-    const index = postsDB.findIndex((p) => p.id === id)
-    if (index === -1) throw new Error(`Post with id ${id} not found`)
-    postsDB.splice(index, 1)
+    if (!res.ok) throw new Error(`Failed to delete post with id ${id}`)
   },
 
   likePost: async (id: number): Promise<Post> => {
-    await delay(500)
-    const index = postsDB.findIndex((p) => p.id === id)
-    if (index === -1) throw new Error(`Post with id ${id} not found`)
-    postsDB[index].likes += 1
+    const res = await fetch(`${API_URL}/posts/${id}/like`, {
+      method: 'POST',
+    })
+    if (!res.ok) throw new Error(`Failed to like post with id ${id}`)
 
-    return postsDB[index]
+    return res.json()
   },
 
   unlikePost: async (id: number): Promise<Post> => {
-    await delay(400)
-    const index = postsDB.findIndex((p) => p.id === id)
-    if (index === -1) throw new Error(`Post with id ${id} not found`)
-    postsDB[index].likes = Math.max(0, postsDB[index].likes - 1)
+    const res = await fetch(`${API_URL}/posts/${id}/unlike`, {
+      method: 'POST',
+    })
+    if (!res.ok) throw new Error(`Failed to unlike post with id ${id}`)
 
-    return postsDB[index]
+    return res.json()
   },
 }

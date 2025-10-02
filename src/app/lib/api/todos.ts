@@ -1,64 +1,59 @@
 import { UpdateTodoInput } from './../../types/todo'
 import { CreateTodoInput, Todo } from '@/app/types/todo'
 
-let todosDB: Todo[] = [
-  { id: 1, title: 'Learn TanStack Query', completed: true, userId: 1 },
-  { id: 2, title: 'Build a Next.js app', completed: false, userId: 1 },
-  { id: 3, title: 'Master TypeScript', completed: false, userId: 1 },
-]
-
-const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
+const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001/api'
 
 export const todosApi = {
   getTodos: async (): Promise<Todo[]> => {
-    await delay(1000)
-    return [...todosDB]
+    const res = await fetch(`${API_URL}/todos`)
+    if (!res.ok) {
+      throw new Error('Failed to fetch todos')
+    }
+
+    return res.json()
   },
 
   getTodoById: async (id: number): Promise<Todo> => {
-    await delay(500)
-    const todo = todosDB.find((t) => t.id === id)
-    if (!todo) throw new Error(`Todo with id ${id} not found`)
-    return todo
+    const res = await fetch(`${API_URL}/todos/${id}`)
+    if (!res.ok) throw new Error(`Todo with id ${id} not found`)
+    return res.json()
   },
 
   createTodo: async (input: CreateTodoInput): Promise<Todo> => {
-    await delay(800)
-    const newTodo: Todo = {
-      id: Math.max(...todosDB.map((t) => t.id)) + 1,
-      ...input,
-      completed: false,
-    }
+    const res = await fetch(`${API_URL}/todos`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(input),
+    })
+    if (!res.ok) throw new Error('Failed to create todo')
 
-    todosDB = [...todosDB, newTodo]
-
-    return newTodo
+    return res.json()
   },
 
   updateTodo: async (input: UpdateTodoInput): Promise<Todo> => {
-    await delay(800)
-    const index = todosDB.findIndex((t) => t.id === input.id)
-    if (index === -1) throw new Error(`Todo with id ${input.id} not found`)
+    const res = await fetch(`${API_URL}/todos/${input.id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(input),
+    })
+    if (!res.ok) throw new Error(`Failed to update todo with id ${input.id}`)
 
-    const updatedTodo = { ...todosDB[index], ...input }
-    todosDB[index] = updatedTodo
-
-    return updatedTodo
+    return res.json()
   },
 
   deleteTodo: async (id: number): Promise<void> => {
-    await delay(400)
-    const index = todosDB.findIndex((t) => t.id === id)
-    if (index === -1) throw new Error(`Todo with id ${id} not found`)
-    todosDB.splice(index, 1)
+    const res = await fetch(`${API_URL}/todos/${id}`, {
+      method: 'DELETE',
+    })
+    if (!res.ok) throw new Error(`Failed to delete todo with id ${id}`)
   },
 
   toggleTodo: async (id: number): Promise<Todo> => {
-    await delay(400)
-    const index = todosDB.findIndex((t) => t.id === id)
-    if (index === -1) throw new Error(`Todo with id ${id} not found`)
+    const res = await fetch(`${API_URL}/todos/${id}/toggle`, {
+      method: 'POST',
+    })
+    if (!res.ok) throw new Error(`Failed to toggle todo with id ${id}`)
 
-    todosDB[index].completed = !todosDB[index].completed
-    return todosDB[index]
+    return res.json()
   },
 }

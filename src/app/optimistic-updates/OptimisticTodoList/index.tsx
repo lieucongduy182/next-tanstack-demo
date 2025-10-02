@@ -1,12 +1,11 @@
 import { todosApi } from '@/app/lib/api/todos'
 import { queryClient } from '@/app/lib/queryClient'
 import { Todo } from '@/app/types/todo'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { useState } from 'react'
 
 export default function OptimisticTodoList() {
   const [newTodoTitle, setNewTodoTitle] = useState('')
-  const query = useQueryClient()
 
   const { data: todos, isLoading } = useQuery({
     queryKey: ['todos'],
